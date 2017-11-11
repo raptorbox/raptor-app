@@ -4,15 +4,11 @@ const bodyParser = require('body-parser')
 const errors = require('raptor-auth/errors')
 const logger = require('./logger')
 
-let app
+let server
 
-const initialize = (router) => {
+const initialize = () => {
 
-    if (app) {
-        return app
-    }
-
-    app = express()
+    const app = express()
 
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,7 +18,7 @@ const initialize = (router) => {
     //     res.json(require('./swagger')())
     // })
 
-    app.use('/', router)
+    app.use('/', require('./router'))
 
     // last call catch 404 and forward to error handler
     app.use(function(req, res, next) {
@@ -55,21 +51,34 @@ const initialize = (router) => {
         res.json(internalError.toJSON())
 
     })
+
+    return app
 }
 
-const start = () => {
-
+const start = (port) => {
+    if(server) return Promise.resolve()
     const app = initialize()
-
     server = require('http').Server(app)
     return new Promise(function(resolve, reject) {
-        server.listen(config.port, function(err) {
+        server.listen(port, function(err) {
             if(err) return reject(err)
-            logger.info(`Server listening on ::${config.port}`)
+            logger.info(`Server listening on ::${port}`)
             resolve()
         })
     })
 
 }
 
-module.exports = { app, start }
+const stop = () => {
+    return new Promise(function(resolve, reject) {
+        if(server === null) return resolve()
+        server.close(function(err) {
+            if(err) return reject(err)
+            server = null
+            logger.info('Server stopped')
+            resolve()
+        })
+    })
+}
+
+module.exports = { start, stop }
