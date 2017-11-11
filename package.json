@@ -189,11 +189,17 @@
     "xtend": "^4.0.1"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.11.0",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "standard-version": "^4.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha test/*.test.js",
+    "serve": "./bin/cli.js",
+    "test-file": "./node_modules/mocha/bin/mocha test/ --grep $@",
+    "release-major": "./node_modules/standard-version/bin/cli.js",
+    "release": "./node_modules/standard-version/bin/cli.js -- --release-as minor"
   },
   "author": "",
   "license": "Apache-2.0"
