@@ -1,0 +1,19 @@
+{
+
+    "url": "http://apigateway",
+    "broker": "mqtt://broker",
+
+    "logLevel": "warn",
+    "port": 10095,
+
+    "service": {
+        "username": "service",
+        "password": "s3rvice",
+        "tokenName": "service-default",
+    },
+
+    "mongodb": {
+        "url": "mongodb://mongo/app"
+    }
+
+}
