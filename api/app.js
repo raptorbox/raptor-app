@@ -2,12 +2,18 @@
 const l = module.exports
 
 const errors = require('../errors')
+const logger = require('../logger')
 const App = require('../models/app')
-const broker = require('../broker')
+const raptor = require('../raptor').client()
 
 const notify = (op, app) => {
-    broker.send({type: 'app', id: app.id, op, app})
-    return Promise.resolve(app)
+    return raptor.getClient().publish({type: 'app', id: app.id, op, app})
+        .then(() => Promise.resolve(app))
+        .catch((e) => {
+            logger.error('Failed to publish app `%s.%s`: %s', app.name, op, e.message)
+            logger.debug(e.stack)
+            return Promise.resolve(app)
+        })
 }
 
 l.list = (query, pager) => {

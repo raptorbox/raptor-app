@@ -10,12 +10,7 @@ const start = () => {
     logger.level = process.env.LOG_LEVEL || config.logLevel || 'info'
 
     // mongoose
-    logger.debug('Connecting to db')
-    return require('./db').connect(config.mongodb)
-        .then(() => {
-            logger.info('Initializing raptor client')
-            return require('./raptor').initialize(config.url, config.service)
-        })
+    return require('./setup')
         .then(() => {
             logger.debug('Starting server')
             return require('./app').start()

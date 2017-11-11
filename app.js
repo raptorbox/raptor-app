@@ -18,7 +18,11 @@ const initialize = () => {
     //     res.json(require('./swagger')())
     // })
 
-    app.use('/', require('./router'))
+    const routes = require('./routes')
+    for(const path in routes) {
+        logger.debug('Register path /%s', path)
+        app.use(`/${path}`, routes[path])
+    }
 
     // last call catch 404 and forward to error handler
     app.use(function(req, res, next) {
