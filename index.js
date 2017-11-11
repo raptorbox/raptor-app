@@ -10,10 +10,10 @@ const start = () => {
     logger.level = process.env.LOG_LEVEL || config.logLevel || 'info'
 
     // mongoose
-    return require('./setup')
+    return require('./setup')()
         .then(() => {
             logger.debug('Starting server')
-            return require('./app').start()
+            return require('./app').start(config.port)
         })
 }
 

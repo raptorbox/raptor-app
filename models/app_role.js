@@ -2,16 +2,12 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-var AppUser = new Schema({
-    id: {
+var AppRole = new Schema({
+    name: {
         type: String,
         required: true
     },
-    enabled: {
-        type: Boolean,
-        default: true
-    },
-    roles: {
+    permissions: {
         type: [String]
     },
 }, {
@@ -23,8 +19,5 @@ var AppUser = new Schema({
     }
 })
 
-AppUser.methods.isOwner = function(app) {
-    return this.id === app.userId
-}
-
-module.exports = mongoose.model('AppUser', AppUser)
+module.exports = mongoose.model('AppRole', AppRole)
+module.exports.schema = AppRole

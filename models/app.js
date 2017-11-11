@@ -1,8 +1,8 @@
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Role = require('raptor-auth/model/Role')
-const AppUser = require('./AppUser')
+const Role = require('./app_role')
+const AppUser = require('./app_user')
 const uuidv4 = require('uuid/v4')
 
 var App = new Schema({
@@ -29,10 +29,10 @@ var App = new Schema({
         required: true,
     },
     roles: {
-        type: [Role]
+        type: [Role.schema],
     },
     users: {
-        type: [AppUser]
+        type: [AppUser.schema]
     }
 }, {
     toJSON: {
@@ -43,16 +43,10 @@ var App = new Schema({
     }
 })
 
-App.plugin(require('raptor-auth/model/plugin/pager'))
+// App.plugin(require('raptor-auth/model/plugin/pager'))
 
 App.methods.isOwner = function(user) {
     return this.userId === user.id
-}
-
-App.methods.loadRoles = function() {
-    return Role.find({
-        appId: this.id
-    })
 }
 
 App.methods.merge = function(t) {
