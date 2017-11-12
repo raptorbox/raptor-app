@@ -27,5 +27,4 @@ AppUser.methods.isOwner = function(app) {
     return this.id === app.userId
 }
 
-module.exports = mongoose.model('AppUser', AppUser)
 module.exports.schema = AppUser

@@ -28,7 +28,9 @@ const authorize =  (opts) => {
 
         //pattern based /<api>/<id>
         const getId = () => {
-            return req.url.split('/')[2]
+            const id = req.url.split('/')[1]
+            if (!id) throw new Error('Cannot parse id')
+            return id
         }
 
         const
@@ -54,7 +56,7 @@ const authorize =  (opts) => {
             break
         }
 
-        return raptor.Auth().can({ type, userId, permission, subjectId }).then((res) => {
+        return raptor.Auth().can( type, permission, subjectId, userId).then((res) => {
             if (!res.result) {
                 return next(new errors.Unauthorized())
             }

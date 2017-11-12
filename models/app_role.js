@@ -19,5 +19,4 @@ var AppRole = new Schema({
     }
 })
 
-module.exports = mongoose.model('AppRole', AppRole)
 module.exports.schema = AppRole

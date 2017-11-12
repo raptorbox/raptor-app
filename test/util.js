@@ -3,6 +3,7 @@ const l = module.exports
 const apiName = 'app'
 
 const Raptor = require('raptor-sdk')
+const Promise = require('bluebird')
 const config = require(process.env.TESTCONFIG || `../config/${apiName}.json`)
 
 // setup default config
@@ -15,6 +16,7 @@ config.sdk = {
 }
 
 let r
+const instances = []
 
 l.before = function() {
     return require('../index').start().then(() => {
@@ -32,7 +34,13 @@ l.after = function() {
                 })
         }
         return Promise.resolve()
-    })
+    }).then(Promise.all(instances)
+        .each((i) => i.getClient().disconnect())
+        .then(() => {
+            instances.length = 0
+            return Promise.resolve()
+        })
+    )
 }
 
 l.randomName = (prefix) => {
@@ -69,6 +77,7 @@ l.createUserInstance = (roles) => {
                         username: u.username,
                         password: u.password,
                     }))
+                    instances.push(r2)
                     return r2.Auth().login()
                         .then(() => Promise.resolve(r2))
                 })

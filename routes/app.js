@@ -26,6 +26,30 @@ router.get('/', function(req, res) {
         })
 })
 
+router.post('/search', function(req, res) {
+
+    const raw = Object.assign({}, req.body)
+    const q = {}
+
+    if (raw.users && raw.users instanceof Array) {
+        q['users.id'] = { $in: raw.users }
+    }
+    if (raw.devices && raw.devices instanceof Array) {
+        q.devices = { $in: raw.devices }
+    }
+
+    if (raw.id && typeof raw.id === 'string') {
+        q.id = raw.id
+    }
+
+    const pager = Object.assign({}, req.query)
+
+    return api.App.list(q, pager)
+        .then((apps) => {
+            res.json(apps)
+        })
+})
+
 router.get('/:id', function(req, res) {
     const q = { id: req.params.id }
     return api.App.read(q)
