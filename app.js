@@ -75,7 +75,7 @@ const start = (port) => {
 
 const stop = () => {
     return new Promise(function(resolve, reject) {
-        if(server === null) return resolve()
+        if(!server) return resolve()
         server.close(function(err) {
             if(err) return reject(err)
             server = null

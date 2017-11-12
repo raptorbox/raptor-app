@@ -7,7 +7,7 @@ const App = require('../models/app')
 const raptor = require('../raptor').client()
 
 const notify = (op, app) => {
-    return raptor.getClient().publish({type: 'app', id: app.id, op, app})
+    return raptor.getClient().publish( `app/${app.id}`, {type: 'app', id: app.id, op, app})
         .then(() => Promise.resolve(app))
         .catch((e) => {
             logger.error('Failed to publish app `%s.%s`: %s', app.name, op, e.message)
@@ -40,9 +40,9 @@ l.update = (t) => {
 }
 
 l.create = (t) => {
-    const app = new App(t)
-    return app.save()
-        .then(() => notify('create', app))
+    return (new App()).merge(t)
+        .then((app) => app.save())
+        .then((app) => notify('create', app))
 }
 
 l.delete = (app) => {

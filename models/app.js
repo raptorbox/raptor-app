@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Role = require('./app_role')
 const AppUser = require('./app_user')
+const AppRole = require('./app_role')
 const uuidv4 = require('uuid/v4')
 
 var App = new Schema({
@@ -57,12 +58,36 @@ App.methods.merge = function(t) {
             if (t.name) {
                 app.name = t.name
             }
+
             if (t.userId) {
-                app.userId = t.userId
+                if(t.userId !== app.userId) {
+                    app.users = app.users.filter((u) => u.id !== t.userId)
+                    app.userId = t.userId
+                }
+            }
+
+            // add owner as admin
+            if(app.users.filter((u) => u.id === app.userId).length === 0) {
+                app.users.push(new AppUser({
+                    id: app.userId,
+                    roles: [ 'admin' ]
+                }))
             }
 
             if (t.enabled !== undefined && t.enabled !== null) {
                 app.enabled = t.enabled
+            }
+
+            if (t.roles && t.roles.length > 0) {
+                app.roles = t.roles
+            }
+
+            // ensure admin role
+            if(app.roles.filter((r) => r.name === 'admin').length === 0) {
+                app.roles.push(new AppRole({
+                    name : 'admin',
+                    permissions: ['admin']
+                }))
             }
 
             return Promise.resolve()

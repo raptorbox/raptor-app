@@ -11,10 +11,13 @@ const authenticate = (/*opts*/) => {
             return next(new errors.Unauthorized('Missing token'))
         }
 
-        const token = header.replace('Bearer ')
+        const token = header.replace('Bearer ','')
 
         return raptor.Admin().Token().check({ token })
-            .then(next)
+            .then((u) => {
+                req.user = u
+                next()
+            })
             .catch((e) => Promise.reject(new errors.Unauthorized(e.message)))
     }
 }
@@ -33,7 +36,7 @@ const authorize =  (opts) => {
             type = opts.type
 
         let permission, subjectId
-        switch (req.method.toLower()) {
+        switch (req.method.toLowerCase()) {
         case 'get':
             permission = 'read'
             subjectId = getId()
@@ -51,7 +54,7 @@ const authorize =  (opts) => {
             break
         }
 
-        return raptor.Admin().User().check({ type, userId, permission, subjectId }).then((res) => {
+        return raptor.Auth().can({ type, userId, permission, subjectId }).then((res) => {
             if (!res.result) {
                 return next(new errors.Unauthorized())
             }

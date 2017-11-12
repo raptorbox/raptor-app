@@ -14,6 +14,27 @@ config.sdk = {
     password: config.service.password
 }
 
+let r
+
+l.before = function() {
+    return require('../index').start().then(() => {
+        return l.getRaptor()
+    })
+}
+
+l.after = function() {
+    return require('../index').stop().then(() => {
+        if(r) {
+            return r.getClient().disconnect()
+                .then(() => {
+                    r = null
+                    return Promise.resolve()
+                })
+        }
+        return Promise.resolve()
+    })
+}
+
 l.randomName = (prefix) => {
     prefix = prefix || ''
     const rnd = Math.round(Math.random() * Date.now())
@@ -21,7 +42,8 @@ l.randomName = (prefix) => {
 }
 
 l.getRaptor = () => {
-    const r =  new Raptor(config.sdk)
+    if(r) return Promise.resolve(r)
+    r =  new Raptor(config.sdk)
     return r.Auth().login()
         .then(() => Promise.resolve(r))
 }
