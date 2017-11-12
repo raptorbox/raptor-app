@@ -1,17 +1,17 @@
 const l = module.exports
 
-process.env.TESTCONFIG = './config.json'
+const apiName = 'app'
 
 const Raptor = require('raptor-sdk')
-const config = require('../config/auth.json')
+const config = require(process.env.TESTCONFIG || `../config/${apiName}.json`)
 
 // setup default config
 // config.logLevel = logger.level = 'debug'
-config.mongodb.url = config.mongodb.url.replace('auth', 'auth_test')
+config.mongodb.url = config.mongodb.url.replace(apiName, apiName + '_test')
 config.sdk = {
-    url: `http://localhost:${config.port}`,
-    username: config.users.admin.username,
-    password: config.users.admin.password
+    url: config.url,
+    username: config.service.username,
+    password: config.service.password
 }
 
 l.randomName = (prefix) => {

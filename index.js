@@ -1,8 +1,6 @@
 
 const logger = require('./logger')
 
-let server = null
-
 const start = () => {
 
     const config = require('./config')
@@ -18,23 +16,9 @@ const start = () => {
 }
 
 const stop = () => {
-    return new Promise(function(resolve, reject) {
-        if(server === null) return resolve()
-        server.close(function(err) {
-            if(err) return reject(err)
-            logger.info('Server stopped')
-            resolve()
-        })
-    })
-        .then(() => {
-            return require('./db').disconnect()
-        })
-        .then(() => {
-            return require('./broker').close()
-        })
-        .then(() => {
-            return require('./cache').close()
-        })
+    return require('./app').stop()
+        .then(() => require('./db').disconnect())
+        .then(() => require('./raptor').client().getClient().disconnect())
 }
 
 module.exports.start = start

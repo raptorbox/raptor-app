@@ -6,7 +6,7 @@ const authenticate = (/*opts*/) => {
     // opts = opts || {}
     return function(req, res, next) {
 
-        const header = req.headers.Authorization
+        const header = req.headers.authorization
         if(!header) {
             return next(new errors.Unauthorized('Missing token'))
         }
