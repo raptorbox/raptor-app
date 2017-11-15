@@ -33,6 +33,11 @@ const authorize =  (opts) => {
             return id
         }
 
+        // skip test if has service or admin role
+        if(req.user.isService() || req.user.isAdmin()) {
+            return next()
+        }
+
         const
             userId = req.user.id,
             type = opts.type
