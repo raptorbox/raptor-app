@@ -34,9 +34,6 @@ router.post('/search', function(req, res) {
     if (raw.users && raw.users instanceof Array) {
         q['users.id'] = { $in: raw.users }
     }
-    if (raw.devices && raw.devices instanceof Array) {
-        q.devices = { $in: raw.devices }
-    }
 
     if (raw.id && typeof raw.id === 'string') {
         q.id = raw.id

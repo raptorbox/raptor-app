@@ -61,7 +61,9 @@ const authorize =  (opts) => {
             break
         }
 
-        return raptor.Auth().can( type, permission, subjectId, userId).then((res) => {
+        const domain = subjectId ? subjectId : null
+
+        return raptor.Auth().can( type, permission, subjectId, userId, domain).then((res) => {
             if (!res.result) {
                 return next(new errors.Unauthorized())
             }

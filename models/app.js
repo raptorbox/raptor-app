@@ -33,8 +33,7 @@ var App = new Schema({
     },
     users: {
         type: [AppUser.schema]
-    },
-    devices: [String]
+    }
 }, {
     toJSON: {
         transform: function (doc, ret) {
@@ -91,10 +90,6 @@ App.methods.merge = function(t) {
                     name : 'admin',
                     permissions: ['admin']
                 })
-            }
-
-            if(t.devices) {
-                app.devices = t.devices
             }
 
             return Promise.resolve()
