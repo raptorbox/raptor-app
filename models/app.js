@@ -43,7 +43,7 @@ var App = new Schema({
     }
 })
 
-// App.plugin(require('raptor-auth/model/plugin/pager'))
+App.plugin(require('./plugin/pager'))
 
 App.methods.isOwner = function(user) {
     return this.userId === user.id
@@ -96,8 +96,6 @@ App.methods.merge = function(t) {
         })
         .then(() => Promise.resolve(app))
 }
-
-App.plugin(require('raptor-auth/models/plugin/pager'))
 
 App.pre('save', function(next) {
     if(!this.id) {
