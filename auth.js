@@ -27,9 +27,9 @@ const authorize =  (opts) => {
     return function(req, res, next) {
 
         //pattern based /<api>/<id>
-        const getId = () => {
+        const getId = (required = false) => {
             const id = req.url.split('/')[1]
-            if (!id) throw new Error('Cannot parse id')
+            if (required && !id) throw new errors.BadRequest('Cannot parse id')
             return id
         }
 
