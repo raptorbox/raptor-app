@@ -1,6 +1,6 @@
 {
 
-    "url": "http://apigateway",
+    "url": "http://raptor.local",
     "broker": "mqtt://broker",
 
     "logLevel": "warn",
