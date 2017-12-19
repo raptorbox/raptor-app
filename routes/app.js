@@ -18,6 +18,11 @@ router.get('/', function(req, res) {
         delete req.query.userId
     }
 
+    if (req.query.domain) {
+        q.domain = req.query.domain
+        delete req.query.domain
+    }
+
     const pager = Object.assign({}, req.query)
 
     return api.App.list(q, pager)
@@ -37,6 +42,10 @@ router.post('/search', function(req, res) {
 
     if (raw.id && typeof raw.id === 'string') {
         q.id = raw.id
+    }
+
+    if (raw.domain && typeof raw.domain === 'string') {
+        q.domain = raw.domain
     }
 
     const pager = Object.assign({}, req.query)

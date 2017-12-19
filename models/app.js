@@ -18,6 +18,11 @@ var App = new Schema({
         index: true,
         required: true,
     },
+    name: {
+        type: String,
+        index: true,
+        required: false,
+    },
     enabled: {
         type: Boolean,
         default: true,
@@ -56,6 +61,10 @@ App.methods.merge = function(t) {
 
             if (t.name) {
                 app.name = t.name
+            }
+
+            if (t.domain) {
+                app.domain = t.domain
             }
 
             if (t.userId) {
