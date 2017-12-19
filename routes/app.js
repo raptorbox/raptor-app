@@ -48,6 +48,10 @@ router.post('/search', function(req, res) {
         q.domain = raw.domain
     }
 
+    if (raw.name && typeof raw.name === 'string') {
+        q.name = raw.name
+    }
+
     const pager = Object.assign({}, req.query)
 
     return api.App.list(q, pager)

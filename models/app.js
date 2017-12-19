@@ -18,7 +18,7 @@ var App = new Schema({
         index: true,
         required: true,
     },
-    name: {
+    domain: {
         type: String,
         index: true,
         required: false,
