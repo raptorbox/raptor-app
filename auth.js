@@ -53,11 +53,11 @@ const authorize =  (opts) => {
             break
         case 'put':
             permission = 'update'
-            subjectId = getId()
+            subjectId = getId(true)
             break
         case 'delete':
             permission = 'delete'
-            subjectId = getId()
+            subjectId = getId(true)
             break
         }
 
