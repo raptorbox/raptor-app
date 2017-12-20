@@ -50,6 +50,9 @@ const authorize =  (opts) => {
             break
         case 'post':
             permission = 'create'
+            if(req.body && req.body.domain) {
+                subjectId = req.body.domain
+            }
             break
         case 'put':
             permission = 'update'

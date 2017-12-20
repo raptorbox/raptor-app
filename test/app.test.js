@@ -7,20 +7,14 @@ const logger = require('../logger')
 const createApp = () => {
     return util.getRaptor().then((r) => {
         const ops = [
-            r.Inventory().create({ name: util.randomName('dev1')}),
-            r.Inventory().create({ name: util.randomName('dev2')}),
-
             util.createUserInstance(),
             util.createUserInstance(),
         ]
-
         return Promise.all(ops).then((ops) => {
 
             const
-                dev1 = ops[0],
-                dev2 = ops[1],
-                u1 = ops[2],
-                u2 = ops[3],
+                u1 = ops[0],
+                u2 = ops[1],
                 u1id = u1.Auth().getUser().id,
                 u2id = u2.Auth().getUser().id
 
@@ -30,17 +24,23 @@ const createApp = () => {
                 users: [
                     { id: u1id, role: ['test1'] },
                     { id: u2id, role: ['test1'] },
-                ],
-                devices: [ dev1.id, dev2.id ]
+                ]
             })
                 .then((app) => {
+                    return Promise.all([
+                        r.Inventory().create({ name: util.randomName('dev1'), domain: app.id }),
+                        r.Inventory().create({ name: util.randomName('dev2'), domain: app.id }),
+                    ]).then((res) => {
 
-                    assert.equal(2, app.devices.length)
-                    assert.equal(3, app.users.length)
-                    assert.equal(1, app.roles.length)
+                        const  dev1 = res[0],
+                            dev2 = res[1]
 
-                    return Promise.resolve({
-                        app, dev1, dev2, u1, u2id, u1id
+                        assert.equal(3, app.users.length)
+                        assert.equal(1, app.roles.length)
+
+                        return Promise.resolve({
+                            app, dev1, dev2, u1, u2id, u1id
+                        })
                     })
                 })
         })
