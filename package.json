@@ -1,6 +1,6 @@
 {
   "name": "raptor-app",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Raptor Application API",
   "main": "index.js",
   "scripts": {
