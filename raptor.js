@@ -7,7 +7,7 @@ let r
 
 l.client = () => r
 
-l.initialize = (url, broker, credentials) => {
+l.initialize = (url, brokerUrl, credentials) => {
     r = new Raptor({
         url, brokerUrl,
         username: credentials.username,
@@ -29,7 +29,10 @@ l.initialize = (url, broker, credentials) => {
         })
         .then((token) => {
             credentials.token = token
-            r.setConfig({ url, token: token.token })
+            const cfg = r.getConfig()
+            cfg.token = token.token
+            cfg.username = cfg.password = null
+            r.setConfig(cfg)
             return r.Auth().login()
         })
 }
