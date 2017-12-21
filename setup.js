@@ -7,6 +7,6 @@ module.exports = () => {
     return require('./db').connect(config.mongodb)
         .then(() => {
             logger.info('Initializing raptor client')
-            return require('./raptor').initialize(config.url, config.service)
+            return require('./raptor').initialize(config.url, config.broker, config.service)
         })
 }

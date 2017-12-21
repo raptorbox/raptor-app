@@ -7,9 +7,9 @@ let r
 
 l.client = () => r
 
-l.initialize = (url, credentials) => {
+l.initialize = (url, broker, credentials) => {
     r = new Raptor({
-        url: url,
+        url, brokerUrl,
         username: credentials.username,
         password: credentials.password
     })

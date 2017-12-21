@@ -1,7 +1,7 @@
 {
 
     "url": "http://apigateway",
-    "broker": "mqtt://broker",
+    "broker": "mqtt://broker:1883",
 
     "logLevel": "warn",
     "port": 10095,
