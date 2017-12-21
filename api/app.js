@@ -46,8 +46,9 @@ l.create = (t) => {
 }
 
 l.delete = (app) => {
+    const json = Object.assign({}, app)
     return App.remove(app)
-        .then((app) => notify('delete', app))
+        .then((app) => notify('delete', json))
 }
 
 l.save = (t) => {
