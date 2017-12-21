@@ -9,7 +9,8 @@ l.client = () => r
 
 l.initialize = (url, brokerUrl, credentials) => {
     r = new Raptor({
-        url, brokerUrl,
+        url,
+        mqttUrl: brokerUrl,
         username: credentials.username,
         password: credentials.password
     })
