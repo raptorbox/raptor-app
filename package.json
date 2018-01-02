@@ -1,6 +1,6 @@
 {
   "name": "raptor-app",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "Raptor Application API",
   "main": "index.js",
   "scripts": {
@@ -129,7 +129,7 @@
     "mongoose": "^4.13.1",
     "mpath": "^0.3.0",
     "mpromise": "^0.5.5",
-    "mqtt": "^2.14.0",
+    "mqtt": "^2.15.0",
     "mqtt-packet": "^5.4.0",
     "mquery": "^2.3.2",
     "ms": "^2.0.0",
@@ -152,7 +152,7 @@
     "punycode": "^1.4.1",
     "qs": "^6.5.1",
     "range-parser": "^1.2.0",
-    "raptor-sdk": "^5.0.12",
+    "raptor-sdk": "^5.0.17",
     "raw-body": "^2.3.2",
     "readable-stream": "^2.2.7",
     "regexp-clone": "^0.0.1",
