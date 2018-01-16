@@ -66,6 +66,17 @@ l.newUser = (username) => {
     return u
 }
 
+l.newUserWithOwnerId = (ownerId) => {
+    const username = l.randomName('user')
+    const u = new Raptor.models.User()
+    u.username = username
+    u.password = 'passwd_' + u.username
+    u.email = u.username + '@test.raptor.local'
+    u.roles = ['user']
+    u.ownerId = ownerId 
+    return u
+}
+
 l.createUserInstance = (roles) => {
     return l.getRaptor()
         .then((r) => {
@@ -86,4 +97,13 @@ l.createUserInstance = (roles) => {
 
 l.createAdminInstance = () => {
     return l.createUserInstance(['admin'])
+}
+
+l.loginWithUser = (username, password) => {
+    const r = new Raptor(Object.assign({}, config.sdk, {
+        username: username,
+        password: password,
+    }))
+    return r.Auth().login()
+        .then(() => Promise.resolve(r))
 }

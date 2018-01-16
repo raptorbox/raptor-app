@@ -132,5 +132,100 @@ describe('app service', function () {
             })
         })
 
+        it('should allow delete own user with app', function () {
+            return util.getRaptor().then(function (r) {
+                return r.App().create({
+                    name: util.randomName('app'),
+                    roles: [{name: 'admin_own_user', permissions: ['admin_own_user']}],
+                    users: []
+                }).then((app) => {
+                    // assert.equal(JSON.stringify(app), 1)
+                    const user1 = util.newUser()
+                    return r.Admin().User().create(user1).then((usr) => {
+                        app.users.push({id:usr.id, role:['admin_own_user']})
+                        return r.App().update(app).then(() => {
+                            // assert.equal(JSON.stringify(app), 1)
+                            return util.loginWithUser(user1.username, user1.password)
+                                .then(function (userRaptor) {
+                                    const u1 = userRaptor.Auth().getUser()
+                                    const u = util.newUserWithOwnerId(u1.id)
+                                    return r.Admin().User().create(u)
+                                        .then(() => {
+                                            return r.Admin().User().list({ownerId: u1.id})
+                                                .then((users) => {
+                                                    return Promise.resolve(users)
+                                                })
+                                        })
+                                        .then((users) => {
+                                            let query = {ownerId: u1.id, domain: app.id}
+                                            return r.Admin().User().delete(users.json.content[0].id, query)
+                                                .then(() => {
+                                                    // assert.isTrue(true)
+                                                    return Promise.resolve()
+                                                })
+                                        }).then(() => {
+                                            return r.Admin().User().list({ownerId: u1.id})
+                                                .then((res) => {
+                                                    assert.equal(res.json.content.length, 0)
+                                                    return Promise.resolve(res)
+                                                })
+                                        })
+                                })
+                        })
+                    })
+                })
+            })
+        })
+
+        it('should allow read devices with app id', function () {
+            return util.getRaptor().then(function (r) {
+                return r.App().create({
+                    name: util.randomName('app'),
+                    roles: [{name: 'admin_device', permissions: ['admin_device']}],
+                    users: []
+                }).then((app) => {
+                    // assert.equal(JSON.stringify(app), 1)
+                    const user1 = util.newUser()
+                    return r.Admin().User().create(user1).then((usr) => {
+                        app.users.push({id:usr.id, role:['admin_device']})
+                        return r.App().update(app).then(() => {
+                            // assert.equal(JSON.stringify(app), 1)
+                            return util.loginWithUser(user1.username, user1.password)
+                                .then(function (userRaptor) {
+                                    const u1 = userRaptor.Auth().getUser()
+                                    const dev = {
+                                        name: 'Robot',
+                                        description: 'robotic device',
+                                        domain: app.id
+                                    }
+                                    return r.Inventory().create(dev)
+                                        .then(() => {
+                                            return userRaptor.Inventory().list({domain: app.id})
+                                                .then((res) => {
+                                                    assert.equal(res.json.content.length, 1)
+                                                    return Promise.resolve(dev)
+                                                })
+                                        })
+                                        // .then((users) => {
+                                        //     let query = {ownerId: u1.id, domain: app.id}
+                                        //     return r.Admin().User().delete(users.json.content[0].id, query)
+                                        //         .then(() => {
+                                        //             // assert.isTrue(true)
+                                        //             return Promise.resolve()
+                                        //         })
+                                        // }).then(() => {
+                                        //     return r.Admin().User().list({ownerId: u1.id})
+                                        //         .then((res) => {
+                                        //             assert.equal(res.json.content.length, 0)
+                                        //             return Promise.resolve(res)
+                                        //         })
+                                        // })
+                                })
+                        })
+                    })
+                })
+            })
+        })
+
     })
 })
