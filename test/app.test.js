@@ -202,7 +202,7 @@ describe('app service', function () {
                                         .then(() => {
                                             return userRaptor.Inventory().list({domain: app.id})
                                                 .then((res) => {
-                                                    assert.equal(res.json.content.length, 1)
+                                                    assert.equal(res.json.content.length, 0)
                                                     return Promise.resolve(dev)
                                                 })
                                         })
