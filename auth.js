@@ -28,7 +28,8 @@ const authorize =  (opts) => {
 
         //pattern based /<api>/<id>
         const getId = (required = false) => {
-            const id = req.url.split('/')[1]
+            const pcs = req.url.split('?')[0] 
+            const id = pcs.split('/')[1]
             if (required && !id) throw new errors.BadRequest('Cannot parse id')
             return id
         }
