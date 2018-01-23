@@ -152,7 +152,7 @@
     "punycode": "^1.4.1",
     "qs": "^6.5.1",
     "range-parser": "^1.2.0",
-    "raptor-sdk": "^5.0.22",
+    "raptor-sdk": "^5.0.26",
     "raw-body": "^2.3.2",
     "readable-stream": "^2.2.7",
     "regexp-clone": "^0.0.1",
