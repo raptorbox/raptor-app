@@ -1,6 +1,7 @@
 
 const api = require('../api')
 const auth = require('../auth')
+const logger = require('../logger')
 
 const router = require('express-promise-router')()
 
@@ -10,7 +11,7 @@ const authz = () => auth.authorize({ type: 'app' })
 
 router.get('/', function(req, res) {
 
-    const q = {
+    let q = {
         'users.id': req.user.id
     }
 
@@ -22,6 +23,15 @@ router.get('/', function(req, res) {
     if (req.query.domain) {
         q.domain = req.query.domain
         delete req.query.domain
+    }
+
+    if (req.query.name) {
+        q.name = req.query.name
+        delete req.query.name
+    }
+
+    if(req.user.isAdmin()) {
+        q = {}
     }
 
     const pager = Object.assign({}, req.query)
@@ -51,6 +61,22 @@ router.post('/search', function(req, res) {
 
     if (raw.name && typeof raw.name === 'string') {
         q.name = raw.name
+    } else if (raw.name && typeof raw.name === 'object') {
+        let keys = Object.keys(raw.name)
+        // if(keys[0] == 'contains') {
+        //     q['name'] = { 'authors': { '$regex': raw.name[keys[0]], '$options': 'i' } }
+        // } else if(keys[0] == 'match') {
+        if(raw.name[keys[0]] && raw.name[keys[0]] !== undefined) {
+            q['name'] = raw.name[keys[0]]
+        }
+        // }
+    }
+
+    if(raw.properties && typeof raw.properties === 'object') {
+        let keys = Object.keys(raw.properties)
+        if(raw.properties[keys[0]] && raw.properties[keys[0]] !== undefined) {
+            q['properties'] = raw.properties[keys[0]]
+        }
     }
 
     const pager = Object.assign({}, req.query)

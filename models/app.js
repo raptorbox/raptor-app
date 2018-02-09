@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 const AppUser = require('./app_user')
 const AppRole = require('./app_role')
 const uuidv4 = require('uuid/v4')
+const logger = require('../logger')
 
 var App = new Schema({
     id: {
@@ -38,6 +39,10 @@ var App = new Schema({
     },
     users: {
         type: [AppUser.schema]
+    },
+    properties: {
+        type: Schema.Types.Mixed,
+        default: {}
     }
 }, {
     toJSON: {
@@ -99,6 +104,15 @@ App.methods.merge = function(t) {
                     name : 'admin',
                     permissions: ['admin']
                 })
+            }
+
+            // Properties: to add extra data in application
+            if(t.properties) {
+                let keys = Object.keys(t.properties)
+                for (var i = 0; i < keys.length; i++) {
+                    logger.debug(t.properties[keys[i]])
+                    app.properties[keys[i]] = t.properties[keys[i]]
+                }
             }
 
             return Promise.resolve()

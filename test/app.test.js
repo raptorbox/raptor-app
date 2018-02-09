@@ -93,6 +93,24 @@ describe('app service', function () {
             })
         })
 
+        it('should update an app for properties', function () {
+            return util.getRaptor().then(function (r) {
+                return r.App().create({
+                    name: util.randomName(),
+                    role: [{name: 'foo',permissions: ['bar']}],
+                    properties: {'desc': 'despacito', 'appIdLora': '3'}
+                }).then((app) => {
+                    let p = app.properties
+                    p.working = true
+                    app.properties = p
+                    return r.App().update(app)
+                }).then((app) => {
+                    assert.equal(true, app.properties.working)
+                    return Promise.resolve()
+                })
+            })
+        })
+
         it('should delete an app', function () {
             return util.getRaptor().then(function (r) {
                 return r.App().create({
