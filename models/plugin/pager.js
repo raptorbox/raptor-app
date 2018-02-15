@@ -9,6 +9,7 @@ module.exports = function (schema, options) {
         paging = paging || {}
 
         // validate input
+        paging.limit = paging.size
         if (paging.limit && (paging.limit*1 != paging.limit)) {
             paging.size = 25
         }
