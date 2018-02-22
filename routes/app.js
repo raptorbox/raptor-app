@@ -111,4 +111,23 @@ router.delete('/:id', authz(), function(req, res) {
         .then((app) => res.json(app))
 })
 
+router.get('/:appId/deleteUser/:userId', authz(), function(req, res) {
+    const userId = req.params.userId
+    const appId = req.params.appId
+    
+    return api.App.read({ id: appId })
+        .then((app) => {
+            let users = app.users
+            for (var i = 0; i < users.length; i++) {
+                if(users[i].id === userId) {
+                    users.splice(i, 1)
+                    break
+                }
+            }
+            app.users = users
+            return api.App.update(app)
+                .then((a) => res.json(a))
+        })
+})
+
 module.exports = router
