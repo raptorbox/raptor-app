@@ -83,7 +83,6 @@
     "har-validator": "^5.0.3",
     "hawk": "^6.0.2",
     "help-me": "^1.1.0",
-    "hoek": "^4.2.1",
     "hooks-fixed": "^2.0.2",
     "http-errors": "^1.6.3",
     "http-signature": "^1.2.0",
