@@ -52,22 +52,26 @@ router.post('/search', function(req, res) {
     }
 
     if (raw.id && typeof raw.id === 'string') {
-        q.id = raw.id
+        // q.id = raw.id
+        q.id = new RegExp(raw.id, 'i')
     }
 
     if (raw.domain && typeof raw.domain === 'string') {
-        q.domain = raw.domain
+        // q.domain = raw.domain
+        q.domain = new RegExp(raw.domain, 'i')
     }
 
     if (raw.name && typeof raw.name === 'string') {
-        q.name = raw.name
+        q.name = new RegExp(raw.name, 'i')
+        // q.name = { $regex: raw.name }
     } else if (raw.name && typeof raw.name === 'object') {
         let keys = Object.keys(raw.name)
         // if(keys[0] == 'contains') {
-        //     q['name'] = { 'authors': { '$regex': raw.name[keys[0]], '$options': 'i' } }
+        //     q['name'] = { 'name': { '$regex': raw.name[keys[0]], '$options': 'i' } }
         // } else if(keys[0] == 'match') {
         if(raw.name[keys[0]] && raw.name[keys[0]] !== undefined) {
-            q['name'] = raw.name[keys[0]]
+            // q['name'] = raw.name[keys[0]]
+            q.name = new RegExp(raw.name[keys[0]], 'i')
         }
         // }
     }
